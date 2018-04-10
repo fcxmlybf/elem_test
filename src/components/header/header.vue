@@ -73,7 +73,7 @@
 </template>
 
 <script>
-    //import star from '../star/star.vue'; //导入星星组件
+    import star from '../star/star.vue'; //导入星星组件
 
     export default{
         props: {
@@ -84,7 +84,7 @@
         data(){
             return { //设置一个变量来控制显示隐藏,vue直接会关联到dom
                 detailShow: false,
-//                iconClassMap:['decrease', 'discount', 'special', 'invoice', 'guarantee'],
+                iconClassMap:['decrease', 'discount', 'special', 'invoice', 'guarantee'],
             }
         },
         methods: {
@@ -99,7 +99,7 @@
             this.iconClassMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
         },
         components: {
-
+			star
         }
     }
 </script>

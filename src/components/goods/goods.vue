@@ -13,33 +13,33 @@
     </div>
     <div class="foods-wrapper" id="wrapper" ref="foodsWrapper">
       <ul>
-        <li v-for="item in goods" class="food-list food-list-hook">
-          <h1 class="title">{{item.name}}</h1>
-          <ul>
-            <li v-for="food in item.foods" class="food-item" @click="goDetail(food)">
-              <div class="icon">
-                <img width="57" height="57" :src="food.icon"/>
-              </div>
-              <div class="content">
-                <h2 class="name">{{food.name}}</h2>
-                <p class="desc" v-show="food.description">{{food.description}}</p>
-                <div class="extra">
-                  <span class="count">月售{{food.sellCount}}份</span>
-                  <span class="rating">好评率{{food.rating}}%</span>
-                </div>
-                <div class="price">
-                  <span class="now"><span class="unit">￥</span>{{food.price}}</span>
-                  <span v-show="food.oldPrice" class="old">￥{{food.oldPrice}}</span>
-                </div>
-                <div class="cartcontrol-wrapper">
-                    <!--在goods列表中的foods列表中的每一项food-->
-                    <cartcontrol :food="food"></cartcontrol>
-
-                </div>
-              </div>
+            <li v-for="item in goods" class="food-list food-list-hook">
+                <h1 class="title">{{item.name}}</h1>
+				<ul>
+					<li v-for="food in item.foods" class="food-item" @click="goDetail(food)">
+						  <div class="icon">
+						        <img width="57" height="57" :src="food.icon"/>
+						  </div>
+						  <div class="content">
+							    <h2 class="name">{{food.name}}</h2>
+							    <p class="desc" v-show="item.description">{{food.description}}</p>
+							    <div class="extra">
+								     <span class="count">月售{{food.sellCount}}份</span>
+								     <span class="rating">好评率{{food.rating}}%</span>
+							    </div>
+							    <div class="price">
+								     <span class="now"><span class="unit">￥</span>{{food.price}}</span>
+								     <span v-show="item.oldPrice" class="old">￥{{food.oldPrice}}</span>
+							    </div>
+							    <div class="cartcontrol-wrapper">
+							        <!--在goods列表中的foods列表中的每一项food-->
+							        <cartcontrol :food="food"></cartcontrol>
+							
+							    </div>
+						  </div>
+					</li>
+				</ul>
             </li>
-          </ul>
-        </li>
       </ul>
     </div>
 
@@ -55,7 +55,7 @@ import iconMap from '../iconMap/iconMap'
 import BScroll from 'better-scroll'
 import shopCart from '../shopCart/shopCart'
 import cartcontrol from '../cartcontrol/cartcontrol'
-//import foodDetail from 'components/foodDetail/foodDetail'
+import foodDetail from '../foodDetail/foodDetail'
 //import Vue from 'vue'
 
 //const ERR_OK = 0
@@ -65,13 +65,15 @@ export default {
     seller: Object
   },
   created() {
-      this.$http.get("http://localhost:9080/getdata").then((res)=>{
-          this.goods = res.data.goods;
-          //console.log(this.seller);
-          this.$nextTick(()=>{
-              this._initScroll();
-              this._calculateHeight();
-          });
+      this.$http.post("http://localhost:80/elemserver/goods.php",{},{
+      }).then((res)=>{
+	      //console.log(res.data);
+	      this.goods = res.data;
+	      console.log(this.goods);
+	      this.$nextTick(()=>{
+		      this._initScroll();
+		      this._calculateHeight();
+	      });
 
       }).catch((err)=>{
           console.log(err);
@@ -79,9 +81,10 @@ export default {
   },
   data() {
     return {
-      goods: [],
+        goods: [],
+	    selectedFood:[],
         foodsScrollY:0,
-      listHeight: [],
+        listHeight: [],
     }
   },
   computed: {
@@ -143,13 +146,20 @@ export default {
 		      return;
 	      }
 	      this.foodsScroll.scrollTo(0,-this.listHeight[index],500);
-      }
+      },
+	
+	  goDetail(food) {
+//		  this.selectedFood = food;
+//		  this.$nextTick(() => {
+//			  this.$refs.myFood.showToggle()
+//		  })
+	  }
   },
   components: {
     iconMap,
     shopCart,
     cartcontrol,
-//    foodDetail
+    foodDetail
   }
 }
 

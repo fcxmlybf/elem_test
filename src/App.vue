@@ -26,10 +26,10 @@
             }
         },
         created(){
-            this.$http.get("http://localhost:9080/getdata").then((res)=>{
-                //console.log(res);
-                this.seller = res.data.seller
-                //console.log(this.seller);
+	        this.$http.post("http://localhost:80/elemserver/seller.php",{},{}).then((res)=>{
+		        //console.log(res);
+                this.seller = res.data[0];
+                
             }).catch((err)=>{
                 console.log(err);
             });
